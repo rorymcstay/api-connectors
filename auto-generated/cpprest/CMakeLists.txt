@@ -47,3 +47,6 @@ set(SUPPORTING_FILES  "ApiClient" "ApiConfiguration" "ApiException" "HttpContent
 file(GLOB SOURCE_FILES  "api/*"  "model/*")
 
 add_library(${PROJECT_NAME} ${SUPPORTING_FILES} ${SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} cpprest)
+
+set(BITMEXAPI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})

@@ -10,55 +10,62 @@
  * Do not edit the class manually.
  */
 
-/*
- * X-any.h
- *
- * 
- */
-
-#ifndef IO_SWAGGER_CLIENT_MODEL_X-any_H_
-#define IO_SWAGGER_CLIENT_MODEL_X-any_H_
 
 
-#include "../ModelBase.h"
-
+#include "X_any.h"
 
 namespace io {
 namespace swagger {
 namespace client {
 namespace model {
 
-/// <summary>
-/// 
-/// </summary>
-class  X-any
-    : public ModelBase
+X_any::X_any()
 {
-public:
-    X-any();
-    virtual ~X-any();
+}
 
-    /////////////////////////////////////////////
-    /// ModelBase overrides
+X_any::~X_any()
+{
+}
 
-    void validate() override;
+void X_any::validate()
+{
+    // TODO: implement validation
+}
 
-    web::json::value toJson() const override;
-    void fromJson(web::json::value& json) override;
-
-    void toMultipart(std::shared_ptr<MultipartFormData> multipart, const utility::string_t& namePrefix) const override;
-    void fromMultiPart(std::shared_ptr<MultipartFormData> multipart, const utility::string_t& namePrefix) override;
-
-    /////////////////////////////////////////////
-    /// X-any members
+web::json::value X_any::toJson() const
+{
+    web::json::value val = web::json::value::object();
 
 
-protected:
-};
+    return val;
+}
+
+void X_any::fromJson(web::json::value& val)
+{
+}
+
+void X_any::toMultipart(std::shared_ptr<MultipartFormData> multipart, const utility::string_t& prefix) const
+{
+    utility::string_t namePrefix = prefix;
+    if(namePrefix.size() > 0 && namePrefix.substr(namePrefix.size() - 1) != utility::conversions::to_string_t("."))
+    {
+        namePrefix += utility::conversions::to_string_t(".");
+    }
+
+}
+
+void X_any::fromMultiPart(std::shared_ptr<MultipartFormData> multipart, const utility::string_t& prefix)
+{
+    utility::string_t namePrefix = prefix;
+    if(namePrefix.size() > 0 && namePrefix.substr(namePrefix.size() - 1) != utility::conversions::to_string_t("."))
+    {
+        namePrefix += utility::conversions::to_string_t(".");
+    }
+
+}
 
 }
 }
 }
 }
 
-#endif /* IO_SWAGGER_CLIENT_MODEL_X-any_H_ */

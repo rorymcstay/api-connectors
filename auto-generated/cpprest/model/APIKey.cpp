@@ -103,11 +103,11 @@ void APIKey::fromJson(web::json::value& val)
         {
             if(item.is_null())
             {
-                m_Permissions.push_back( std::shared_ptr<X-any>(nullptr) );
+                m_Permissions.push_back( std::shared_ptr<X_any>(nullptr) );
             }
             else
             {
-                std::shared_ptr<X-any> newItem(new X-any());
+                std::shared_ptr<X_any> newItem(new X_any());
                 newItem->fromJson(item);
                 m_Permissions.push_back( newItem );
             }
@@ -200,11 +200,11 @@ void APIKey::fromMultiPart(std::shared_ptr<MultipartFormData> multipart, const u
         {
             if(item.is_null())
             {
-                m_Permissions.push_back( std::shared_ptr<X-any>(nullptr) );
+                m_Permissions.push_back( std::shared_ptr<X_any>(nullptr) );
             }
             else
             {
-                std::shared_ptr<X-any> newItem(new X-any());
+                std::shared_ptr<X_any> newItem(new X_any());
                 newItem->fromJson(item);
                 m_Permissions.push_back( newItem );
             }
@@ -287,12 +287,12 @@ void APIKey::unsetCidr()
     m_CidrIsSet = false;
 }
 
-std::vector<std::shared_ptr<X-any>>& APIKey::getPermissions()
+std::vector<std::shared_ptr<X_any>>& APIKey::getPermissions()
 {
     return m_Permissions;
 }
 
-void APIKey::setPermissions(std::vector<std::shared_ptr<X-any>> value)
+void APIKey::setPermissions(std::vector<std::shared_ptr<X_any>> value)
 {
     m_Permissions = value;
     m_PermissionsIsSet = true;

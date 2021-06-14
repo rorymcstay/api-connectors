@@ -22,7 +22,7 @@
 
 #include "../ModelBase.h"
 
-#include "X-any.h"
+#include "X_any.h"
 #include <cpprest/details/basic_types.h>
 #include <vector>
 
@@ -85,10 +85,10 @@ public:
     /// <summary>
     /// 
     /// </summary>
-    std::vector<std::shared_ptr<X-any>>& getPermissions();
+    std::vector<std::shared_ptr<X_any>>& getPermissions();
     bool permissionsIsSet() const;
     void unsetPermissions();
-    void setPermissions(std::vector<std::shared_ptr<X-any>> value);
+    void setPermissions(std::vector<std::shared_ptr<X_any>> value);
     /// <summary>
     /// 
     /// </summary>
@@ -116,7 +116,7 @@ protected:
         double m_Nonce;
         utility::string_t m_Cidr;
     bool m_CidrIsSet;
-    std::vector<std::shared_ptr<X-any>> m_Permissions;
+    std::vector<std::shared_ptr<X_any>> m_Permissions;
     bool m_PermissionsIsSet;
     bool m_Enabled;
     bool m_EnabledIsSet;
