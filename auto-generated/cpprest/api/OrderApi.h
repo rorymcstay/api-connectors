@@ -22,9 +22,9 @@
 
 #include "../ApiClient.h"
 
-#include "Error.h"
+#include "model/Error.h"
 #include "Object.h"
-#include "Order.h"
+#include "model/Order.h"
 #include <cpprest/details/basic_types.h>
 
 #include <boost/optional.hpp>
