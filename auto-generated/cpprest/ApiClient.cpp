@@ -13,6 +13,7 @@
 #include "ApiClient.h"
 #include "MultipartFormData.h"
 #include "ModelBase.h"
+#include "./auth_helpers.h"
 
 namespace io {
 namespace swagger {
@@ -194,8 +195,13 @@ pplx::task<web::http::http_response> ApiClient::callApi(
         request.headers().add( web::http::header_names::user_agent, m_Configuration->getUserAgent() );
     }
 
+    if (shouldAuth(request.request_uri().path())) {
+        doAuth(request);
+    }
+
     return client.request(request);
 }
+
 
 }
 }
