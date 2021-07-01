@@ -5,22 +5,74 @@
 #ifndef TRADINGO_AUTH_HELPERS_H
 #define TRADINGO_AUTH_HELPERS_H
 
-#include "cpprest/http_client.h"
+#include <openssl/sha.h>
+#include <openssl/hmac.h>
+
+#include <string>
+#include <string_view>
+#include <array>
+
+#include <cpprest/http_client.h>
 
 
 bool shouldAuth(const utility::string_t& url_) {
     for (auto& needAuth : {"order", "position"}) {
-        if (url_.find(needAuth) == utility::string_t::npos)
+        if (url_.find(needAuth) != utility::string_t::npos)
             return true;
     }
     return false;
 }
 
-void doAuth(web::http::http_request& request) {
 
+
+std::string CalcHmacSHA256(const std::string& decodedKey, const std::string& msg) {
+    std::array<unsigned char, EVP_MAX_MD_SIZE> hash{};
+    unsigned int hashLen;
+
+    HMAC(
+            EVP_sha256(),
+            decodedKey.c_str(),
+            static_cast<int>(decodedKey.size()),
+            reinterpret_cast<unsigned char const*>(msg.c_str()),
+            static_cast<int>(msg.size()),
+            hash.data(),
+            &hashLen
+    );
+
+    return std::string{reinterpret_cast<const char *>(hash.data()), hashLen};
+}
+
+std::string string_to_hex(const std::string& input) {
+    static const char hex_digits[] = "0123456789abcdef";
+
+    std::string output;
+    output.reserve(input.length() * 2);
+    for (unsigned char c : input)
+    {
+        output.push_back(hex_digits[c >> 4]);
+        output.push_back(hex_digits[c & 15]);
+    }
+    return output;
+}
+
+
+void doAuth(web::http::http_request& request, const std::string& apiKey_, const std::string& apiSecret_) {
+
+    /// hex(HMAC_SHA256(apiSecret, verb + path + expires + data))
     std::stringstream signature;
-    auto expires = std::chrono::system_clock::now() + std::chrono::seconds(1);
-    signature << std::hex << request.method() << request.relative_uri().path() << std::to_string(expires.time_since_epoch().count()) <<  request.body() ;
+    long expires;
+    if (request.headers().find("api-expires") == request.headers().end()) {
+        expires = (std::chrono::system_clock::now() + std::chrono::seconds(1)).time_since_epoch().count();
+    } else {
+        expires = std::stoi(request.headers()["api-expires"]);
+    }
+    signature << request.method() << request.relative_uri().path() << std::to_string(expires) << request.extract_string(true).get();
+    auto sigStr = signature.str();
+    auto encodedSig = CalcHmacSHA256(apiSecret_, sigStr);
+    auto hexStr = string_to_hex(encodedSig);
+    request.headers().add("api-signature", hexStr);
+    request.headers().add("api-expires", expires);
+    request.headers().add("api-key", apiKey_);
 
 }
 

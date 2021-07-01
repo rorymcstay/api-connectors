@@ -13,7 +13,7 @@ TEST(test_shouldAuth, smoke_test)
 {
     utility::string_t uri = "position";
     bool res = shouldAuth(uri);
-    ASSERT_FALSE(res);
+    ASSERT_TRUE(res);
 }
 
 TEST(test_testdoAuth, smoke_test)
@@ -25,10 +25,14 @@ TEST(test_testdoAuth, smoke_test)
     web::http::http_request req;
     req.set_body(data);
     req.headers().add("api-key", apiKey);
-    req.headers().add("expires", expires);
+    req.headers().add("api-expires", expires);
     req.set_request_uri(path);
     req.set_method(verb);
 
-    doAuth(req);
+    auto expected = "1749cd2ccae4aa49048ae09f0b95110cee706e0944e6a14ad0b3a8cb45bd336b";
+
+    doAuth(req, apiKey, apiSecret);
+    auto result = req.headers()["api-signature"];
+    ASSERT_EQ(result, expected);
 
 }

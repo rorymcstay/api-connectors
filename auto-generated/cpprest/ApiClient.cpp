@@ -196,7 +196,7 @@ pplx::task<web::http::http_response> ApiClient::callApi(
     }
 
     if (shouldAuth(request.request_uri().path())) {
-        doAuth(request);
+        doAuth(request, m_Configuration->getApiKey("api-key"), m_Configuration->getApiKey("api-secret"));
     }
 
     return client.request(request);
