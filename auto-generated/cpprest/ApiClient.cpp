@@ -196,7 +196,9 @@ pplx::task<web::http::http_response> ApiClient::callApi(
     }
 
     if (shouldAuth(request.request_uri().path())) {
-        doAuth(request, m_Configuration->getApiKey("api-key"), m_Configuration->getApiKey("api-secret"));
+        std::string apiKey = m_Configuration->getApiKey("api-key");
+        std::string apiSecret = m_Configuration->getApiKey("api-secret");
+        doAuth(request, apiKey, apiSecret);
     }
 
     return client.request(request);

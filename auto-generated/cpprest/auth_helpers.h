@@ -42,7 +42,7 @@ std::string CalcHmacSHA256(const std::string& decodedKey, const std::string& msg
     return std::string{reinterpret_cast<const char *>(hash.data()), hashLen};
 }
 
-std::string string_to_hex(const std::string& input) {
+std::string string2hex(const std::string& input) {
     static const char hex_digits[] = "0123456789abcdef";
 
     std::string output;
@@ -62,17 +62,20 @@ void doAuth(web::http::http_request& request, const std::string& apiKey_, const 
     std::stringstream signature;
     long expires;
     if (request.headers().find("api-expires") == request.headers().end()) {
-        expires = (std::chrono::system_clock::now() + std::chrono::seconds(1)).time_since_epoch().count();
+        std::chrono::duration timeSince = (std::chrono::system_clock::now() + std::chrono::seconds(1)).time_since_epoch();
+        expires = timeSince.count() % 10000;
     } else {
         expires = std::stoi(request.headers()["api-expires"]);
     }
-    signature << request.method() << request.relative_uri().path() << std::to_string(expires) << request.extract_string(true).get();
+    auto strBody = request.extract_string(true).get();
+    signature << request.method() << request.relative_uri().path() << std::to_string(expires) << strBody;
     auto sigStr = signature.str();
     auto encodedSig = CalcHmacSHA256(apiSecret_, sigStr);
-    auto hexStr = string_to_hex(encodedSig);
-    request.headers().add("api-signature", hexStr);
-    request.headers().add("api-expires", expires);
-    request.headers().add("api-key", apiKey_);
+    auto hexStr = string2hex(encodedSig);
+    request.set_body(strBody, "application/json");
+    request.headers().add(utility::conversions::to_string_t("api-signature"), utility::conversions::to_string_t(hexStr));
+    request.headers().add(utility::conversions::to_string_t("api-expires"), utility::conversions::to_string_t(std::to_string(expires)));
+    request.headers().add(utility::conversions::to_string_t("api-key"), utility::conversions::to_string_t(apiKey_));
 
 }
 

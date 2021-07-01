@@ -21,7 +21,9 @@ TEST(test_testdoAuth, smoke_test)
     std::string verb = "POST";
     std::string path = "/api/v1/order";
     std::string expires = "1518064238"; // 2018-02-08T04:30:38Z
-    std::string data = "{\"symbol\":\"XBTM15\",\"price\":219.0,\"clOrdID\":\"mm_bitmex_1a/oemUeQ4CAJZgP3fjHsA\",\"orderQty\":98}";
+    std::string data = R"({"symbol":"XBTM15","price":219.0,"clOrdID":"mm_bitmex_1a/oemUeQ4CAJZgP3fjHsA","orderQty":98})";
+    auto jsonData = web::json::value::parse(data);
+    auto strJson = jsonData.serialize();
     web::http::http_request req;
     req.set_body(data);
     req.headers().add("api-key", apiKey);
