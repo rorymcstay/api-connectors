@@ -16,7 +16,7 @@
 
 bool shouldAuth(const utility::string_t& url_);
 
-
+long getExpires();
 
 std::string CalcHmacSHA256(const std::string& decodedKey, const std::string& msg);
 

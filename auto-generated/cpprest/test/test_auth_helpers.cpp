@@ -36,5 +36,12 @@ TEST(test_testdoAuth, smoke_test)
     doAuth(req, apiKey, apiSecret);
     auto result = req.headers()["api-signature"];
     ASSERT_EQ(result, expected);
+    ASSERT_EQ(std::stoi(req.headers()["Content-Length"]), data.size());
 
+}
+
+TEST(getExpires, smoke_test)
+{
+    std::string exp = std::to_string(getExpires());
+    ASSERT_EQ(exp.size(), 10);
 }

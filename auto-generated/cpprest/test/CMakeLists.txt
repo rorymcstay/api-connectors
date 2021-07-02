@@ -6,6 +6,7 @@ endif(${GTest_FOUND} EQUAL "FALSE")
 
 add_executable(test_swagger
         ./test_auth_helpers.cpp
+        ./../auth_helpers.cpp
         ./main.cpp
         )
 

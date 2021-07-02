@@ -12,6 +12,14 @@ bool shouldAuth(const utility::string_t &url_) {
     return false;
 }
 
+
+long getExpires() {
+    std::chrono::duration timeSince = (std::chrono::system_clock::now() + std::chrono::seconds(3600)).time_since_epoch();
+    long expiresPer = timeSince.count();
+    long expires = expiresPer* std::chrono::system_clock::period::num / std::chrono::system_clock::period::den;
+    return expires;
+}
+
 std::string CalcHmacSHA256(const std::string &decodedKey, const std::string &msg) {
     std::array<unsigned char, EVP_MAX_MD_SIZE> hash{};
     unsigned int hashLen;
@@ -30,10 +38,14 @@ std::string CalcHmacSHA256(const std::string &decodedKey, const std::string &msg
 }
 
 std::string string2hex(const std::string &input) {
-    static const char hex_digits[] = "0123456789abcdef";
 
+    /*
+    auto hexStr = OPENSSL_buf2hexstr(reinterpret_cast<const unsigned char *>(input.c_str()), input.size());
+    return hexStr;
+     */
     std::string output;
     output.reserve(input.length() * 2);
+    static const char hex_digits[] = "0123456789abcdef";
     for (unsigned char c : input)
     {
         output.push_back(hex_digits[c >> 4]);
@@ -48,8 +60,7 @@ void doAuth(web::http::http_request &request, const std::string &apiKey_, const 
     std::stringstream signature;
     long expires;
     if (request.headers().find("api-expires") == request.headers().end()) {
-        std::chrono::duration timeSince = (std::chrono::system_clock::now() + std::chrono::seconds(1)).time_since_epoch();
-        expires = timeSince.count() % 10000;
+        expires = getExpires();
     } else {
         expires = std::stoi(request.headers()["api-expires"]);
     }
@@ -59,13 +70,18 @@ void doAuth(web::http::http_request &request, const std::string &apiKey_, const 
     auto hexStr = hex_hmac_sha256(apiSecret_, sigStr);
 
     request.set_body(strBody, "application/json");
-    request.headers().add(utility::conversions::to_string_t("api-signature"), utility::conversions::to_string_t(hexStr));
-    request.headers().add(utility::conversions::to_string_t("api-expires"), utility::conversions::to_string_t(std::to_string(expires)));
-    request.headers().add(utility::conversions::to_string_t("api-key"), utility::conversions::to_string_t(apiKey_));
+    request.headers()[utility::conversions::to_string_t("api-signature")] = utility::conversions::to_string_t(hexStr);
+    request.headers()[utility::conversions::to_string_t("api-expires")] = utility::conversions::to_string_t(std::to_string(expires));
+    request.headers()[utility::conversions::to_string_t("api-key")] = utility::conversions::to_string_t(apiKey_);
+
+    for (auto & hdr : request.headers())
+        std::cout << "Header='" << hdr.first << "' Value='" << hdr.second << "'\n";
 
 }
+
 
 std::string hex_hmac_sha256(const std::string &apiSecret_, const std::string &data_) {
     auto encodedSig = CalcHmacSHA256(apiSecret_, data_);
     auto hexStr = string2hex(encodedSig);
+    return hexStr;
 }
