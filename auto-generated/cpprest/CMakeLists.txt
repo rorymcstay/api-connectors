@@ -42,7 +42,7 @@ endif( NOT DEFINED CPPREST_ROOT )
 include_directories(${PROJECT_SOURCE_DIR} api model ${CPPREST_INCLUDE_DIR})
 
 #SUPPORTING FILES
-set(SUPPORTING_FILES  "ApiClient" "ApiConfiguration" "ApiException" "HttpContent" "IHttpBody" "JsonBody" "ModelBase" "MultipartFormData" "Object")
+set(SUPPORTING_FILES  "ApiClient" "ApiConfiguration" "ApiException" "HttpContent" "IHttpBody" "JsonBody" "ModelBase" "MultipartFormData" "Object" "auth_helpers")
 #SOURCE FILES
 file(GLOB SOURCE_FILES  "api/*"  "model/*")
 
