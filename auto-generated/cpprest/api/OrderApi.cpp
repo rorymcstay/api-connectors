@@ -1486,9 +1486,10 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
         // 5xx - client error  : not OK
         if (response.status_code() >= 400)
         {
-            throw ApiException(response.status_code()
+            auto ex = ApiException(response.status_code()
                 , utility::conversions::to_string_t("error calling order_newBulk: ") + response.reason_phrase()
                 , std::make_shared<std::stringstream>(response.extract_utf8string(true).get()));
+            std::cout << ex.getContent() <<'\n';
         }
 
         // check response content type
