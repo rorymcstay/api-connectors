@@ -1484,12 +1484,16 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
         // 3xx - redirection   : OK
         // 4xx - client error  : not OK
         // 5xx - client error  : not OK
+        for (auto& kvp : response.headers())
+            std::cout << kvp.first << "='" << kvp.second << "'\n";
+
         if (response.status_code() >= 400)
         {
             auto ex = ApiException(response.status_code()
                 , utility::conversions::to_string_t("error calling order_newBulk: ") + response.reason_phrase()
                 , std::make_shared<std::stringstream>(response.extract_utf8string(true).get()));
-            std::cout << ex.getContent() <<'\n';
+            std::cout << "ApiException: " << ex.getContent()->rdbuf() << " status_code='" << response.status_code() << "'\n";
+            throw ex;
         }
 
         // check response content type
