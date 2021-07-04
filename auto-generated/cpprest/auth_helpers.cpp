@@ -74,9 +74,6 @@ void doAuth(web::http::http_request &request, const std::string &apiKey_, const 
     request.headers()[utility::conversions::to_string_t("api-expires")] = utility::conversions::to_string_t(std::to_string(expires));
     request.headers()[utility::conversions::to_string_t("api-key")] = utility::conversions::to_string_t(apiKey_);
 
-    for (auto & hdr : request.headers())
-        std::cout << "Header='" << hdr.first << "' Value='" << hdr.second << "'\n";
-
 }
 
 

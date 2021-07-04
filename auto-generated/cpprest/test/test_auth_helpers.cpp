@@ -40,6 +40,16 @@ TEST(test_testdoAuth, smoke_test)
 
 }
 
+TEST(test_hex_hmax, smokeTest) {
+
+    std::string apiKey = "-rqipjFxM43WSRKdC8keq83K";
+    std::string apiSecret = "uaCYIiwpwpXNKuVGCBPWE3ThzvyhOzKs6F9mWFzc9LueG3yd";
+    std::string data ="POST/order/bulk1625247548{\"orders\":[{\"clOrdID\":\"MCST0\",\"orderID\":\"\",\"orderQty\":50,\"price\":33709.5,\"side\":\"Buy\",\"symbol\":\"XBTUSD\"},{\"clOrdID\":\"MCST1\",\"orderID\":\"\",\"orderQty\":50,\"price\":33710,\"side\":\"Sell\",\"symbol\":\"XBTUSD\"}]}";
+    auto res = hex_hmac_sha256(apiSecret, data);
+    auto exp = "50afa5dd51b0190190712a49cd99c30d76c7f06ba357569edd915d37f58a1d77";
+    ASSERT_EQ(res, exp);
+}
+
 TEST(getExpires, smoke_test)
 {
     std::string exp = std::to_string(getExpires());

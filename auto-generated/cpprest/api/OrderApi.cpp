@@ -903,6 +903,8 @@ pplx::task<std::shared_ptr<Order>> OrderApi::order_closePosition(utility::string
     }
 
     std::shared_ptr<IHttpBody> httpBody;
+
+
     utility::string_t requestHttpContentType;
 
     // use JSON if possible
@@ -1391,7 +1393,6 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
 
     std::shared_ptr<ApiConfiguration> apiConfiguration( m_ApiClient->getConfiguration() );
     utility::string_t path = utility::conversions::to_string_t("/order/bulk");
-    
     std::map<utility::string_t, utility::string_t> queryParams;
     std::map<utility::string_t, utility::string_t> headerParams( apiConfiguration->getDefaultHeaders() );
     std::map<utility::string_t, utility::string_t> formParams;
@@ -1432,12 +1433,6 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
     consumeHttpContentTypes.insert( utility::conversions::to_string_t("application/json") );
     consumeHttpContentTypes.insert( utility::conversions::to_string_t("application/x-www-form-urlencoded") );
 
-    if (orders)
-    {
-        formParams[ utility::conversions::to_string_t("orders") ] = ApiClient::parameterToString(*orders);
-    }
-
-    std::shared_ptr<IHttpBody> httpBody;
     utility::string_t requestHttpContentType;
 
     // use JSON if possible
@@ -1480,6 +1475,7 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
         }
     }
 
+    std::shared_ptr<IHttpBody> httpBody = std::make_shared<JsonBody>(web::json::value::parse(R"({"orders":)" + orders.value() +'}'));
     return m_ApiClient->callApi(path, utility::conversions::to_string_t("POST"), queryParams, httpBody, headerParams, formParams, fileParams, requestHttpContentType)
     .then([=](web::http::http_response response)
     {
