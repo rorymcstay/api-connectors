@@ -65,7 +65,7 @@ void doAuth(web::http::http_request &request, const std::string &apiKey_, const 
         expires = std::stoi(request.headers()["api-expires"]);
     }
     auto strBody = request.extract_string(true).get();
-    signature << request.method() << request.relative_uri().path() << std::to_string(expires) << strBody;
+    signature << request.method() << "/api/v1" << request.relative_uri().path() << std::to_string(expires) << strBody;
     auto sigStr = signature.str();
     auto hexStr = hex_hmac_sha256(apiSecret_, sigStr);
 

@@ -1484,8 +1484,10 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
         // 3xx - redirection   : OK
         // 4xx - client error  : not OK
         // 5xx - client error  : not OK
+        /*
         for (auto& kvp : response.headers())
             std::cout << kvp.first << "='" << kvp.second << "'\n";
+            */
 
         if (response.status_code() >= 400)
         {
