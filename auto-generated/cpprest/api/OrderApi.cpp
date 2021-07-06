@@ -1482,7 +1482,7 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
         // 1xx - informational : OK
         // 2xx - successful       : OK
         // 3xx - redirection   : OK
-        // 4xx - client error  : not OK
+        // 4xx - client error  : not OK§
         // 5xx - client error  : not OK
         /*
         for (auto& kvp : response.headers())
