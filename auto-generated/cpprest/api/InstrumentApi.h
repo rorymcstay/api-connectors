@@ -22,10 +22,10 @@
 
 #include "../ApiClient.h"
 
-#include "Error.h"
-#include "IndexComposite.h"
-#include "Instrument.h"
-#include "InstrumentInterval.h"
+#include "./model/Error.h"
+#include "./model/IndexComposite.h"
+#include "./model/Instrument.h"
+#include "./model/InstrumentInterval.h"
 #include <cpprest/details/basic_types.h>
 
 #include <boost/optional.hpp>
