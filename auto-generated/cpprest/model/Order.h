@@ -65,6 +65,15 @@ public:
     bool clOrdIDIsSet() const;
     void unsetClOrdID();
     void setClOrdID(utility::string_t value);
+
+    /// <summary>
+    ///
+    /// </summary>
+    utility::string_t getOrigClOrdID() const;
+    bool origClOrdIDIsSet() const;
+    void unsetOrigClOrdID();
+    void setOrigClOrdID(utility::string_t value);
+
     /// <summary>
     /// 
     /// </summary>
@@ -287,6 +296,8 @@ protected:
     utility::string_t m_OrderID;
         utility::string_t m_ClOrdID;
     bool m_ClOrdIDIsSet;
+    utility::string_t m_OrigClOrdID;
+    bool m_OrigClOrdIDIsSet;
     utility::string_t m_ClOrdLinkID;
     bool m_ClOrdLinkIDIsSet;
     double m_Account;

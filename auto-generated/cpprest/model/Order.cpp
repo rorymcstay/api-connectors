@@ -24,6 +24,8 @@ Order::Order()
     m_OrderID = utility::conversions::to_string_t("");
     m_ClOrdID = utility::conversions::to_string_t("");
     m_ClOrdIDIsSet = false;
+    m_OrigClOrdID = utility::conversions::to_string_t("");
+    m_OrigClOrdIDIsSet = false;
     m_ClOrdLinkID = utility::conversions::to_string_t("");
     m_ClOrdLinkIDIsSet = false;
     m_Account = 0.0;
@@ -105,6 +107,10 @@ web::json::value Order::toJson() const
     if(m_ClOrdIDIsSet)
     {
         val[utility::conversions::to_string_t("clOrdID")] = ModelBase::toJson(m_ClOrdID);
+    }
+    if(m_OrigClOrdIDIsSet)
+    {
+        val[utility::conversions::to_string_t("origClOrdID")] = ModelBase::toJson(m_OrigClOrdID);
     }
     if(m_ClOrdLinkIDIsSet)
     {
@@ -243,6 +249,14 @@ void Order::fromJson(web::json::value& val)
         if(!fieldValue.is_null())
         {
             setClOrdID(ModelBase::stringFromJson(fieldValue));
+        }
+    }
+    if(val.has_field(utility::conversions::to_string_t("origClOrdID")))
+    {
+        web::json::value& fieldValue = val[utility::conversions::to_string_t("origClOrdID")];
+        if(!fieldValue.is_null())
+        {
+            setOrigClOrdID(ModelBase::stringFromJson(fieldValue));
         }
     }
     if(val.has_field(utility::conversions::to_string_t("clOrdLinkID")))
@@ -509,6 +523,11 @@ void Order::toMultipart(std::shared_ptr<MultipartFormData> multipart, const util
         multipart->add(ModelBase::toHttpContent(namePrefix + utility::conversions::to_string_t("clOrdID"), m_ClOrdID));
         
     }
+    if(m_OrigClOrdIDIsSet)
+    {
+        multipart->add(ModelBase::toHttpContent(namePrefix + utility::conversions::to_string_t("OrigClOrdID"), m_OrigClOrdID));
+
+    }
     if(m_ClOrdLinkIDIsSet)
     {
         multipart->add(ModelBase::toHttpContent(namePrefix + utility::conversions::to_string_t("clOrdLinkID"), m_ClOrdLinkID));
@@ -666,6 +685,10 @@ void Order::fromMultiPart(std::shared_ptr<MultipartFormData> multipart, const ut
     {
         setClOrdID(ModelBase::stringFromHttpContent(multipart->getContent(utility::conversions::to_string_t("clOrdID"))));
     }
+    if(multipart->hasContent(utility::conversions::to_string_t("OrigClOrdID")))
+    {
+        setOrigClOrdID(ModelBase::stringFromHttpContent(multipart->getContent(utility::conversions::to_string_t("OrigClOrdID"))));
+    }
     if(multipart->hasContent(utility::conversions::to_string_t("clOrdLinkID")))
     {
         setClOrdLinkID(ModelBase::stringFromHttpContent(multipart->getContent(utility::conversions::to_string_t("clOrdLinkID"))));
@@ -808,22 +831,43 @@ utility::string_t Order::getClOrdID() const
     return m_ClOrdID;
 }
 
+utility::string_t Order::getOrigClOrdID() const
+{
+    return m_OrigClOrdID;
+}
+
 
 void Order::setClOrdID(utility::string_t value)
 {
     m_ClOrdID = value;
     m_ClOrdIDIsSet = true;
 }
+
+
+void Order::setOrigClOrdID(utility::string_t value)
+{
+    m_OrigClOrdID = value;
+    m_OrigClOrdIDIsSet = true;
+}
+
+
 bool Order::clOrdIDIsSet() const
 {
     return m_ClOrdIDIsSet;
 }
 
+bool Order::origClOrdIDIsSet() const
+{
+    return m_OrigClOrdIDIsSet;
+}
 void Order::unsetClOrdID()
 {
     m_ClOrdIDIsSet = false;
 }
-
+void Order::unsetOrigClOrdID()
+{
+    m_OrigClOrdIDIsSet = false;
+}
 utility::string_t Order::getClOrdLinkID() const
 {
     return m_ClOrdLinkID;
