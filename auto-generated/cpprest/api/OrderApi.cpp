@@ -1494,7 +1494,6 @@ pplx::task<std::vector<std::shared_ptr<Order>>> OrderApi::order_newBulk(boost::o
             auto ex = ApiException(response.status_code()
                 , utility::conversions::to_string_t("error calling order_newBulk: ") + response.reason_phrase()
                 , std::make_shared<std::stringstream>(response.extract_utf8string(true).get()));
-            std::cout << "ApiException: " << ex.getContent()->rdbuf() << " status_code='" << response.status_code() << "'\n";
             throw ex;
         }
 
