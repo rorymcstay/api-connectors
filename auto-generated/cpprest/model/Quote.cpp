@@ -269,6 +269,11 @@ void Quote::unsetAskSize()
     m_AskSizeIsSet = false;
 }
 
+
+    bool Quote::timestampIsSet() const {
+        return m_Timestamp.is_initialized();
+    }
+
 }
 }
 }

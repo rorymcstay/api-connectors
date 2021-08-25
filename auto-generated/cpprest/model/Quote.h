@@ -58,6 +58,7 @@ public:
     /// </summary>
     utility::datetime getTimestamp() const;
         void setTimestamp(utility::datetime value);
+        bool timestampIsSet() const;
     /// <summary>
     /// 
     /// </summary>
