@@ -25,7 +25,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # BUILD TYPE
-message("A ${CMAKE_BUILD_TYPE} build configuration is detected")
+message(STATUS "A ${CMAKE_BUILD_TYPE} build configuration is detected")
 
 # Update require components as necessary
 #find_package(Boost 1.45.0 REQUIRED COMPONENTS ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
@@ -47,7 +47,7 @@ set(SUPPORTING_FILES  "ApiClient" "ApiConfiguration" "ApiException" "HttpContent
 file(GLOB SOURCE_FILES  "api/*"  "model/*")
 
 add_library(${PROJECT_NAME} ${SUPPORTING_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} cpprest)
+target_link_libraries(${PROJECT_NAME} ${CPPREST_LIBRARY_DIR}/libcpprest.so)
 
 set(BITMEXAPI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
