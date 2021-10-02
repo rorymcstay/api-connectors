@@ -9,6 +9,7 @@ add_executable(test_swagger
         ./../auth_helpers.cpp
         ./main.cpp
         )
+
 target_link_libraries(test_swagger 
     ${GTEST_LIBRARIES}
     pthread
