@@ -12,6 +12,10 @@ cmake_minimum_required (VERSION 3.16)
 
 #PROJECT's NAME
 project(CppRestSwaggerClient)
+if(BOOST_ASIO_DISABLE_CONCEPTS)
+    add_definitions(-DBOOST_ASIO_DISABLE_CONCEPTS=1)
+    message(STATUS "Disabled boost asio concepts.")
+endif(BOOST_ASIO_DISABLE_CONCEPTS)
 
 
 # THE LOCATION OF OUTPUT BINARIES
