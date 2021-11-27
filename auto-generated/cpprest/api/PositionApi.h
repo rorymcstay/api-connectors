@@ -22,8 +22,8 @@
 
 #include "../ApiClient.h"
 
-#include "Error.h"
-#include "Position.h"
+#include "model/Error.h"
+#include "model/Position.h"
 #include <cpprest/details/basic_types.h>
 
 #include <boost/optional.hpp>
