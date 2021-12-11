@@ -22,6 +22,7 @@ namespace model {
 Order::Order()
 {
     m_OrderID = utility::conversions::to_string_t("");
+    m_OrderIDIsSet = false;
     m_ClOrdID = utility::conversions::to_string_t("");
     m_ClOrdIDIsSet = false;
     m_OrigClOrdID = utility::conversions::to_string_t("");
@@ -103,7 +104,10 @@ web::json::value Order::toJson() const
 {
     web::json::value val = web::json::value::object();
 
-    val[utility::conversions::to_string_t("orderID")] = ModelBase::toJson(m_OrderID);
+    if(m_OrderIDIsSet) {
+        val[utility::conversions::to_string_t("orderID")] =
+            ModelBase::toJson(m_OrderID);
+    }
     if(m_ClOrdIDIsSet)
     {
         val[utility::conversions::to_string_t("clOrdID")] = ModelBase::toJson(m_ClOrdID);
@@ -517,7 +521,11 @@ void Order::toMultipart(std::shared_ptr<MultipartFormData> multipart, const util
         namePrefix += utility::conversions::to_string_t(".");
     }
 
-    multipart->add(ModelBase::toHttpContent(namePrefix + utility::conversions::to_string_t("orderID"), m_OrderID));
+    if(m_OrderIDIsSet) {
+        multipart->add(ModelBase::toHttpContent(
+            namePrefix + utility::conversions::to_string_t("orderID"),
+            m_OrderID));
+    }
     if(m_ClOrdIDIsSet)
     {
         multipart->add(ModelBase::toHttpContent(namePrefix + utility::conversions::to_string_t("clOrdID"), m_ClOrdID));
@@ -823,6 +831,7 @@ utility::string_t Order::getOrderID() const
 
 void Order::setOrderID(utility::string_t value)
 {
+    m_OrderIDIsSet = true;
     m_OrderID = value;
     
 }
@@ -863,6 +872,10 @@ bool Order::origClOrdIDIsSet() const
 void Order::unsetClOrdID()
 {
     m_ClOrdIDIsSet = false;
+}
+void Order::unsetOrderID()
+{
+    m_OrderIDIsSet = false;
 }
 void Order::unsetOrigClOrdID()
 {

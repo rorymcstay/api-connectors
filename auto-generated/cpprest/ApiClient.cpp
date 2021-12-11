@@ -148,7 +148,7 @@ pplx::task<web::http::http_response> ApiClient::callApi(
                 web::json::value body_data = web::json::value::object();
                 for (auto& kvp : formParams)
                 {
-                    body_data[kvp.first] = web::json::value::parse(kvp.second);
+                    body_data[kvp.first] = web::json::value::string(kvp.second);
                 }
                 if (!formParams.empty())
                 {

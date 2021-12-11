@@ -64,6 +64,7 @@ public:
     utility::string_t getClOrdID() const;
     bool clOrdIDIsSet() const;
     void unsetClOrdID();
+    void unsetOrderID();
     void setClOrdID(utility::string_t value);
 
     /// <summary>
@@ -294,6 +295,7 @@ public:
 
 protected:
     utility::string_t m_OrderID;
+    bool m_OrderIDIsSet;
         utility::string_t m_ClOrdID;
     bool m_ClOrdIDIsSet;
     utility::string_t m_OrigClOrdID;
