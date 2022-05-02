@@ -1,7 +1,7 @@
 //
 // Created by Rory McStay on 02/07/2021.
 //
-
+#include <ratio>
 #include "auth_helpers.h"
 
 bool shouldAuth(const utility::string_t &url_) {
@@ -14,9 +14,9 @@ bool shouldAuth(const utility::string_t &url_) {
 
 
 long getExpires() {
-    std::chrono::duration timeSince = (std::chrono::system_clock::now() + std::chrono::seconds(3600)).time_since_epoch();
-    long expiresPer = timeSince.count();
-    long expires = expiresPer* std::chrono::system_clock::period::num / std::chrono::system_clock::period::den;
+    std::chrono::duration<int> expiresPer = std::chrono::duration_cast<std::chrono::seconds>(
+            (std::chrono::system_clock::now() + std::chrono::seconds(3600)).time_since_epoch());
+    long expires = expiresPer.count() * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den;
     return expires;
 }
 
