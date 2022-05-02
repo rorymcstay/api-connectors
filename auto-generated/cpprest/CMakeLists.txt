@@ -17,12 +17,15 @@ if(BOOST_ASIO_DISABLE_CONCEPTS)
     message(STATUS "Disabled boost asio concepts.")
 endif(BOOST_ASIO_DISABLE_CONCEPTS)
 
+find_package(CPPRESTSDK REQUIRED)
 
 # THE LOCATION OF OUTPUT BINARIES
 set(CMAKE_LIBRARY_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_DIR})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_STANDARD 11)
+add_compile_options("-fPIC")
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -34,25 +37,60 @@ message(STATUS "A ${CMAKE_BUILD_TYPE} build configuration is detected")
 # Update require components as necessary
 #find_package(Boost 1.45.0 REQUIRED COMPONENTS ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
 
-# build and set path to cpp rest sdk
-#set(CPPREST_ROOT ${PROJECT_SOURCE_DIR}/../../../developmentTools/3rdParty/cpprest)
-set(CPPREST_INCLUDE_DIR ${CPPREST_ROOT}/include)
-set(CPPREST_LIBRARY_DIR ${CPPREST_ROOT}/lib)
-
-if( NOT DEFINED CPPREST_ROOT )
-    message( FATAL_ERROR "Failed to find cpprest SDK (or missing components). Double check that \"CPPREST_ROOT\" is properly set")
-endif( NOT DEFINED CPPREST_ROOT )
 
 include_directories(${PROJECT_SOURCE_DIR} api model ${CPPREST_INCLUDE_DIR})
 
 #SUPPORTING FILES
-set(SUPPORTING_FILES  "ApiClient" "ApiConfiguration" "ApiException" "HttpContent" "IHttpBody" "JsonBody" "ModelBase" "MultipartFormData" "Object" "auth_helpers")
+set(SUPPORTING_FILES "ApiClient" "ApiConfiguration" "ApiException" "HttpContent" "IHttpBody" "JsonBody" "ModelBase" "MultipartFormData" "Object" "auth_helpers")
 #SOURCE FILES
 file(GLOB SOURCE_FILES  "api/*"  "model/*")
+file(GLOB HEADER_FILES "api/*.h" "model/*.h" "*.h")
 
 add_library(${PROJECT_NAME} ${SUPPORTING_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} ${CPPREST_LIBRARY})
+target_link_libraries(${PROJECT_NAME}
+        cpprest
+        boost_system
+        pthread
+    )
 
-set(BITMEXAPI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+# loses directory hiearchy
+#set_target_properties(
+#    ${PROJECT_NAME}
+#    PROPERTIES PUBLIC_HEADER
+#    "${HEADER_FILES}")
 
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/api/"
+        DESTINATION "include/api"
+        FILES_MATCHING
+        PATTERN "*.h"
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/model/"
+        DESTINATION "include/model"
+        FILES_MATCHING
+        PATTERN "*.h"
+)
+install(FILES
+        "ApiClient.h"
+        "ApiConfiguration.h"
+        "ApiException.h"
+        "HttpContent.h"
+        "IHttpBody.h"
+        "JsonBody.h"
+        "ModelBase.h"
+        "MultipartFormData.h"
+        "Object.h"
+        "auth_helpers.h"
+        DESTINATION "include/" # target directory
+)
+    
 add_subdirectory(test)
+
+install(TARGETS ${PROJECT_NAME}
+    EXPORT bitmex-swagger-client 
+    LIBRARY DESTINATION lib
+    #PUBLIC_HEADER DESTINATION include 
+)
+install(EXPORT bitmex-swagger-client
+    NAMESPACE BITMEX_
+    DESTINATION lib
+)
