@@ -829,6 +829,8 @@ class OrderApi(object):
             form_params.append(('text', params['text']))  # noqa: E501
 
         body_params = None
+        body_params = { kvp[0]: kvp[1] for kvp in form_params }
+        form_params = None
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
             ['application/json', 'application/xml', 'text/xml', 'application/javascript', 'text/javascript'])  # noqa: E501
