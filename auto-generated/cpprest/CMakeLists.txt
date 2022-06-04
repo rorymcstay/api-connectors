@@ -48,7 +48,8 @@ file(GLOB SOURCE_FILES  "api/*"  "model/*")
 file(GLOB HEADER_FILES "api/*.h" "model/*.h" "*.h")
 
 add_library(${PROJECT_NAME} ${SUPPORTING_FILES} ${SOURCE_FILES})
-target_link_directories(${PROJECT_NAME} "${CPPRESTSDK_DIR}/../../")
+link_directories("${CPPRESTSDK_DIR}/../../")
+
 target_link_libraries(${PROJECT_NAME}
         cpprest
         boost_system
