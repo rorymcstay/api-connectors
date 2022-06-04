@@ -48,7 +48,7 @@ file(GLOB HEADER_FILES "api/*.h" "model/*.h" "*.h")
 
 add_library(${PROJECT_NAME} ${SUPPORTING_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME}
-        cpprest
+        ${PACKAGE_INSTALLS}/cpprest/lib/libcpprest.so
         boost_system
         pthread
     )
