@@ -13,5 +13,5 @@ add_executable(test_swagger
 target_link_libraries(test_swagger 
     ${GTEST_LIBRARIES}
     pthread
-    cpprest
+    ${PACKAGE_INSTALLS}/cpprest/lib/libcpprest.so
     crypto)
