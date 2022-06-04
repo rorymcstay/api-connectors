@@ -38,7 +38,7 @@ message(STATUS "A ${CMAKE_BUILD_TYPE} build configuration is detected")
 #find_package(Boost 1.45.0 REQUIRED COMPONENTS ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
 
 
-include_directories(${PROJECT_SOURCE_DIR} api model ${CPPREST_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR} api model ${PACKAGE_INSTALLS}/cpprest/include)
 
 #SUPPORTING FILES
 set(SUPPORTING_FILES "ApiClient" "ApiConfiguration" "ApiException" "HttpContent" "IHttpBody" "JsonBody" "ModelBase" "MultipartFormData" "Object" "auth_helpers")
