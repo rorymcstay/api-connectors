@@ -54,7 +54,10 @@ web::json::value OrderBookL2::toJson() const
     {
         val[utility::conversions::to_string_t("price")] = ModelBase::toJson(m_Price);
     }
-
+    if(m_TimestampIsSet)
+    {
+        val[utility::conversions::to_string_t("timestamp")] = ModelBase::toJson(m_Timestamp);
+    }
     return val;
 }
 
@@ -77,6 +80,14 @@ void OrderBookL2::fromJson(web::json::value& val)
         if(!fieldValue.is_null())
         {
             setPrice(ModelBase::doubleFromJson(fieldValue));
+        }
+    }
+    if(val.has_field(utility::conversions::to_string_t("timestamp")))
+    {
+        web::json::value& fieldValue = val[utility::conversions::to_string_t("timestamp")];
+        if(!fieldValue.is_null())
+        {
+            setTimestamp(ModelBase::dateFromJson(fieldValue));
         }
     }
 }
@@ -196,6 +207,26 @@ bool OrderBookL2::priceIsSet() const
 void OrderBookL2::unsetPrice()
 {
     m_PriceIsSet = false;
+}
+utility::datetime OrderBookL2::getTimestamp() const
+{
+    return m_Timestamp;
+}
+
+
+void OrderBookL2::setTimestamp(utility::datetime value)
+{
+    m_Timestamp = value;
+    m_TimestampIsSet = true;
+}
+bool OrderBookL2::timestampIsSet() const
+{
+    return m_TimestampIsSet;
+}
+
+void OrderBookL2::unsetTimestamp()
+{
+    m_TimestampIsSet = false;
 }
 
 }

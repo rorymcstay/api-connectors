@@ -82,6 +82,13 @@ public:
     bool priceIsSet() const;
     void unsetPrice();
     void setPrice(double value);
+    /// <summary>
+    /// 
+    /// </summary>
+    utility::datetime getTimestamp() const;
+    bool timestampIsSet() const;
+    void unsetTimestamp();
+    void setTimestamp(utility::datetime value);
 
 protected:
     utility::string_t m_Symbol;
@@ -91,6 +98,9 @@ protected:
     bool m_SizeIsSet;
     double m_Price;
     bool m_PriceIsSet;
+
+    utility::datetime m_Timestamp;
+    bool m_TimestampIsSet;
 };
 
 }
